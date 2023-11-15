@@ -1,0 +1,28 @@
+version: "3.1"
+
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./.env-non-dev
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  template:
+    build:
+      context: .
+    container_name: template_app
+    env_file:
+      - ./.env-non-dev
+    depends_on:
+      - postgres
+    command: ["/app/docker/app.sh"]
+    ports:
+      - 7777:8000
+
+volumes:
+  postgres-data:
