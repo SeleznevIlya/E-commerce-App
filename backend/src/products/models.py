@@ -1,0 +1,80 @@
+from typing import Optional
+import uuid
+from sqlalchemy import ForeignKey, String, Text
+from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql import func
+
+from ..database import Base
+
+
+class ProductCategory(Base):
+    __tablename__ = "product_category"
+
+    product_id: Mapped[int] = mapped_column(ForeignKey("product.id"), primary_key=True)
+    category_id: Mapped[int] = mapped_column(ForeignKey("category.id"), primary_key=True)
+
+    extra_data: Mapped[Optional[str]]
+
+    # association between ProductCategory -> Product
+
+    product: Mapped["Product"] = relationship(back_populates="category_associations")
+
+    # association between ProductCategory -> Category
+
+    category: Mapped["Category"] = relationship(back_populates="product_associations")
+
+
+class Product(Base):
+    __tablename__ = "product"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID, primary_key=True, index=True, default=uuid.uuid4)
+    product_name: Mapped[str] = mapped_column(String(50), unique=True, index=True)
+    description: Mapped[str] = mapped_column(
+        Text,
+        default="",
+        server_default="",
+    )
+    cost: Mapped[int] 
+    count: Mapped[int] = mapped_column(default=0)
+    rating: Mapped[int] = mapped_column(default=0)
+
+    # many-to-many relationship to Category, bypassing the `ProductCategory` class
+    categories: Mapped[list["Category"]] = relationship(
+        secondary="ProductCategory", back_populates="products"
+    )
+
+    # association between Product -> ProductCategory -> Category
+    category_associations: Mapped[list["ProductCategory"]] = relationship(back_populates="product")
+
+
+class Category(Base):
+    __tablename__ = "category"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID, primary_key=True, index=True, default=uuid.uuid4)
+    category_name: Mapped[str] = mapped_column(String(30))
+
+    # many-to-many relationship to Product, bypassing the `ProductCategory` class
+    products: Mapped[list["Product"]] = relationship(
+        secondary="ProductCategory", back_populates="categories"
+    )
+
+    # association between Category -> ProductCategory -> Product
+    product_associations: Mapped[list["ProductCategory"]] = relationship(back_populates="category")
+
+    
+
+# class ProductImage(Base):
+#     __tablename__ = "product_image"
+    
+
+#     image_name: Mapped[str] = mapped_column(String(50), primary_key=True)
+#     filetype: Mapped[str]
+#     product_id: Mapped[uuid.UUID] = mapped_column(UUID, ForeignKey("product.id", ondelete="CASCADE"))
+
+
+
+
+

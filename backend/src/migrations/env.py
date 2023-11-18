@@ -13,6 +13,7 @@ sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
 from src.database import Base
 from src.users.models import UserModel, RefreshSessionModel
+from src.products.models import Product, ProductCategory
 from src.config import settings
 
 # this is the Alembic Config object, which provides
