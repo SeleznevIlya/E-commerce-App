@@ -76,8 +76,25 @@ class ProductService:
         pass
     
     @classmethod
-    async def delete_product():
-        pass
+    async def delete_product(cls, product_name: str):
+        async with async_session_maker() as session:
+            db_product = await ProductRepository.find_one_or_none(
+                session, 
+                product_name=product_name,
+                )
+    
+            if db_product is None:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, detail="Product not found"
+                )
+            
+            await ProductRepository.delete(
+                session,
+                ProductModel.product_name == product_name,
+            )
+            await session.commit()
+
+        return {'details': "Product deleted successfully"}
     
     @classmethod
     async def get_product_list():
