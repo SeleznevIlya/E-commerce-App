@@ -11,6 +11,7 @@ class ProductBase(BaseModel):
     product_code:  Optional[str] = Field(None)
     cost:  Optional[int] = Field(None)
     rating:  Optional[int] = Field(None)
+    count: Optional[int] = Field(None)
 
 
 class ProductCreate(ProductBase):
@@ -18,13 +19,22 @@ class ProductCreate(ProductBase):
     product_code: str
     description: str
     count: int
+    cost: int
 
 
 class ProductCreateDB(ProductBase):
     pass
 
 
-class ProductUpdate(ProductBase):
+class ProductUpdate(BaseModel):
+    product_name: str
+    product_code: str
+    description: str
+    count: int
+    cost: int
+
+
+class ProductUpdateDB(ProductBase):
     pass
 
 
@@ -37,7 +47,6 @@ class ProductUpdatePartial(ProductCreate):
     rating: int | None = None
     
 
-
 class Product(ProductBase):
     id: uuid.UUID
     product_name: str
@@ -46,6 +55,38 @@ class Product(ProductBase):
     count: int
     rating: int
 
+
+    class Config:
+        from_attributes = True
+
+#_________________________________
+
+
+class CategoryBase(BaseModel):
+
+    category_name: Optional[str] = Field(None)
+
+
+class CategoryCreate(CategoryBase):
+
+    category_name: str
+
+
+class CategoryCreateDB(CategoryBase):
+    pass
+
+
+class CategoryUpdate(CategoryBase):
+    pass
+
+
+class CategoryUpdateDB(CategoryBase):
+    pass
+
+
+class Category(CategoryBase):
+    id: uuid.UUID
+    category_name: str
 
     class Config:
         from_attributes = True
