@@ -3,6 +3,7 @@ from typing import TypeVar, Generic, Optional, List, Union, Dict, Any
 from abc import ABC, abstractmethod
 
 from sqlalchemy import delete, insert, update, select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.sql import func
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,6 +22,10 @@ class AbstractRepository(ABC):
     
     @abstractmethod
     async def find_one_or_none():
+        raise NotImplementedError
+    
+    @abstractmethod
+    async def find_one_with_connected_model():
         raise NotImplementedError
     
     @abstractmethod
@@ -61,6 +66,15 @@ class BaseRepository(AbstractRepository, Generic[ModelType, CreateSchemaType, Up
         stmt = select(cls.model).filter(*filter).filter_by(**filter_by)
         result = await session.execute(stmt)
         return result.scalars().one_or_none()
+    
+    @classmethod
+    async def find_one_with_connected_model(cls, session: AsyncSession, *filter, **filter_by) -> Optional[ModelType]:
+        stmt = (
+            select(cls.model).
+            filter_by(**filter_by).
+            options(selectinload(*filter))
+            )
+        return await session.scalar(stmt)
 
     @classmethod
     async def find_all(cls, 
@@ -173,3 +187,4 @@ class BaseRepository(AbstractRepository, Generic[ModelType, CreateSchemaType, Up
             cls.model).filter(*filter).filter_by(**filter_by)
         result = await session.execute(stmt)
         return result.scalar()
+    

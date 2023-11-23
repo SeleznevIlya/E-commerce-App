@@ -16,11 +16,11 @@ class ProductCategoryModel(Base):
 
     # association between ProductCategory -> Product
 
-    product: Mapped["ProductModel"] = relationship(back_populates="category_associations")
+    # product: Mapped["ProductModel"] = relationship(back_populates="category_associations")
 
     # association between ProductCategory -> Category
 
-    category: Mapped["CategoryModel"] = relationship(back_populates="product_associations")
+    # category: Mapped["CategoryModel"] = relationship(back_populates="product_associations")
 
 
 class ProductModel(Base):
@@ -41,13 +41,13 @@ class ProductModel(Base):
 
     # many-to-many relationship to Category, bypassing the `ProductCategory` class
 
-    # categories: Mapped[list["CategoryModel"]] = relationship(
-    #     secondary="product_category", back_populates="products"
-    # )
+    categories: Mapped[list["CategoryModel"]] = relationship(
+        secondary="product_category", back_populates="products"
+    )
 
     # association between Product -> ProductCategory -> Category
 
-    category_associations: Mapped[list["ProductCategoryModel"]] = relationship(back_populates="product")
+    # category_associations: Mapped[list["ProductCategoryModel"]] = relationship(back_populates="product")
 
 
     def __repr__(self) -> str:
@@ -63,13 +63,13 @@ class CategoryModel(Base):
 
     # many-to-many relationship to Product, bypassing the `ProductCategory` class
 
-    # products: Mapped[list["ProductModel"]] = relationship(
-    #     secondary="product_category", back_populates="categories"
-    # )
+    products: Mapped[list["ProductModel"]] = relationship(
+        secondary="product_category", back_populates="categories"
+    )
 
     # association between Category -> ProductCategory -> Product
     
-    product_associations: Mapped[list["ProductCategoryModel"]] = relationship(back_populates="category")
+    # product_associations: Mapped[list["ProductCategoryModel"]] = relationship(back_populates="category")
 
     
 
@@ -81,8 +81,3 @@ class CategoryModel(Base):
 #     filetype: Mapped[str]
 
 #     product_id: Mapped[uuid.UUID] = mapped_column(UUID, ForeignKey("product.id", ondelete="CASCADE"))
-
-
-
-
-

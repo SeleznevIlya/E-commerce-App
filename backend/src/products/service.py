@@ -5,8 +5,11 @@ from jose import jwt
 from fastapi import HTTPException, status
 from typing import List
 
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+
 from .schemas import CategoryCreate, CategoryCreateDB, ProductCreate, ProductCreateDB, ProductUpdate, ProductUpdateDB, ProductUpdatePartial
-from .models import CategoryModel, ProductModel
+from .models import CategoryModel, ProductCategoryModel, ProductModel
 from ..database import async_session_maker
 from .repository import CategoryRepository, ProductRepository
 
@@ -58,6 +61,23 @@ class ProductService:
         return db_product
     
     @classmethod
+    async def get_product_list(cls, *filter, offset: int = 0, limit: int = 100, **filter_by):
+        async with async_session_maker() as session:
+            products = await ProductRepository.find_all(
+                session, 
+                *filter, 
+                offset=offset, 
+                limit=limit, 
+                **filter_by
+                )
+        
+        if products is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Products not found"
+            )
+        return products
+    
+    @classmethod
     async def get_product_list_by_partname(cls, product_name: str) -> list[ProductModel]:
         async with async_session_maker() as session:
             products = await ProductRepository.find_all(
@@ -81,10 +101,7 @@ class ProductService:
                     status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
 
             product_in = ProductUpdateDB(
-                **product.model_dump(
-                    exclude={"rating"},
-                    exclude_unset=True
-                )
+                **product.model_dump()
             )
 
             product_update = await ProductRepository.update(
@@ -96,6 +113,30 @@ class ProductService:
             await session.commit()
             
             return product_update
+    
+
+    # @classmethod
+    # async def update_product_partial(cls, query_product_name: str, product: ProductUpdatePartial) -> ProductModel:
+    #     async with async_session_maker() as session:
+    #         db_product = await ProductRepository.find_one_or_none(session, 
+    #                                                            ProductModel.product_name == query_product_name)
+    #         if db_product is None:
+    #             raise HTTPException(
+    #                 status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
+
+    #         product_in = ProductUpdateDB(
+    #             **product.model_dump()
+    #         )
+
+    #         product_update = await ProductRepository.update(
+    #             session,
+    #             ProductModel.product_name == query_product_name,
+    #             obj_in=product_in,
+    #         )
+
+    #         await session.commit()
+            
+    #         return product_update
         
     
     @classmethod
@@ -120,10 +161,28 @@ class ProductService:
         return {'details': "Product deleted successfully"}
     
     @classmethod
-    async def get_product_list():
-        pass
+    async def add_product_categories(cls, product_name: str, request_categories: list):
+        async with async_session_maker() as session:
+            product = await ProductRepository.find_one_with_connected_model(
+                session,
+                ProductModel.categories,
+                product_name=product_name,
+            )
 
+            categories_list = []
 
+            for category in request_categories:
+                category_result = await CategoryRepository.find_one_or_none(
+                session, 
+                category_name=category,
+                )
+                if category_result:
+                    categories_list.append(category_result)
+            
+            product.categories = categories_list
+
+            await session.commit()        
+    
 
 class CategoryService:
 
@@ -173,3 +232,4 @@ class CategoryService:
             await session.commit()
 
         return {'details': "Category deleted successfully"}
+    
