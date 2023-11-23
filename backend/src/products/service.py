@@ -209,6 +209,23 @@ class CategoryService:
         return db_category
     
     @classmethod
+    async def get_category_list(cls, *filter, offset: int = 0, limit: int = 100, **filter_by):
+        async with async_session_maker() as session:
+            categories = await CategoryRepository.find_all(
+                session, 
+                *filter, 
+                offset=offset, 
+                limit=limit, 
+                **filter_by
+                )
+        
+        if categories is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Categories not found"
+            )
+        return categories
+    
+    @classmethod
     async def update_category():
         pass
     

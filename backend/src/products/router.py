@@ -53,6 +53,13 @@ async def create_category(category: CategoryCreate) -> Category:
     return await CategoryService.create_new_category(category)
 
 
+@product_router.get("/category/")
+async def get_category_list(offset: Optional[int] = 0,
+                           limit: Optional[int] = 100,
+                           ) -> list[Category]:
+    return await CategoryService.get_category_list(offset=offset, limit=limit)
+
+
 @product_router.delete("/category/delete")
 async def delete_category(category_name: str):
     return await CategoryService.delete_category(category_name)
