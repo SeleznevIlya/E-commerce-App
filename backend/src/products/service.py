@@ -1,15 +1,7 @@
-import uuid
-from datetime import datetime, timedelta, timezone
-from typing import Optional
-from jose import jwt
 from fastapi import HTTPException, status
-from typing import List
-
-from sqlalchemy import select
-from sqlalchemy.orm import selectinload
 
 from .schemas import CategoryCreate, CategoryCreateDB, ProductCreate, ProductCreateDB, ProductUpdate, ProductUpdateDB, ProductUpdatePartial
-from .models import CategoryModel, ProductCategoryModel, ProductModel
+from .models import CategoryModel, ProductModel
 from ..database import async_session_maker
 from .repository import CategoryRepository, ProductRepository
 
@@ -49,10 +41,11 @@ class ProductService:
     @classmethod
     async def get_product(cls, product_name: str) -> ProductModel:
         async with async_session_maker() as session:
-            db_product = await ProductRepository.find_one_or_none(
-                session, 
+            db_product = await ProductRepository.find_one_with_connected_model(
+                session,
+                ProductModel.categories,
                 product_name=product_name,
-                )
+            )
         
         if db_product is None:
             raise HTTPException(
@@ -61,11 +54,11 @@ class ProductService:
         return db_product
     
     @classmethod
-    async def get_product_list(cls, *filter, offset: int = 0, limit: int = 100, **filter_by):
+    async def get_product_list(cls, offset: int = 0, limit: int = 100, **filter_by) -> list[ProductModel]:
         async with async_session_maker() as session:
-            products = await ProductRepository.find_all(
+            products = await ProductRepository.find_all_with_connected_model(
                 session, 
-                *filter, 
+                ProductModel.categories, 
                 offset=offset, 
                 limit=limit, 
                 **filter_by
@@ -161,7 +154,7 @@ class ProductService:
         return {'details': "Product deleted successfully"}
     
     @classmethod
-    async def add_product_categories(cls, product_name: str, request_categories: list):
+    async def add_product_categories(cls, product_name: str, category_list: list) -> ProductModel:
         async with async_session_maker() as session:
             product = await ProductRepository.find_one_with_connected_model(
                 session,
@@ -171,7 +164,7 @@ class ProductService:
 
             categories_list = []
 
-            for category in request_categories:
+            for category in category_list:
                 category_result = await CategoryRepository.find_one_or_none(
                 session, 
                 category_name=category,
@@ -181,7 +174,8 @@ class ProductService:
             
             product.categories = categories_list
 
-            await session.commit()        
+            await session.commit()    
+        return product    
     
 
 class CategoryService:
@@ -209,7 +203,7 @@ class CategoryService:
         return db_category
     
     @classmethod
-    async def get_category_list(cls, *filter, offset: int = 0, limit: int = 100, **filter_by):
+    async def get_category_list(cls, *filter, offset: int = 0, limit: int = 100, **filter_by) -> list[CategoryModel]:
         async with async_session_maker() as session:
             categories = await CategoryRepository.find_all(
                 session, 

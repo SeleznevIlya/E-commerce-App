@@ -1,9 +1,7 @@
-from typing import Optional
 import uuid
 from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.sql import func
 
 from src.database import Base
 
@@ -81,3 +79,8 @@ class CategoryModel(Base):
 #     filetype: Mapped[str]
 
 #     product_id: Mapped[uuid.UUID] = mapped_column(UUID, ForeignKey("product.id", ondelete="CASCADE"))
+
+
+
+
+

@@ -4,6 +4,39 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
+class CategoryBase(BaseModel):
+
+    category_name: Optional[str] = Field(None)
+
+
+class CategoryCreate(CategoryBase):
+
+    category_name: str
+
+
+class CategoryCreateDB(CategoryBase):
+    pass
+
+
+class CategoryUpdate(CategoryBase):
+    pass
+
+
+class CategoryUpdateDB(CategoryBase):
+    pass
+
+
+class Category(CategoryBase):
+    id: uuid.UUID
+    category_name: str
+
+    class Config:
+        from_attributes = True
+
+
+#_________________________________
+
+
 class ProductBase(BaseModel):
 
     product_name: Optional[str] = Field(None)
@@ -46,7 +79,6 @@ class ProductUpdatePartial(ProductUpdate):
     count: int | None = None
     
     
-
 class Product(ProductBase):
     id: uuid.UUID
     product_name: str
@@ -54,39 +86,8 @@ class Product(ProductBase):
     cost: int
     count: int
     rating: int
+    categories: list[Category]
 
-
-    class Config:
-        from_attributes = True
-
-#_________________________________
-
-
-class CategoryBase(BaseModel):
-
-    category_name: Optional[str] = Field(None)
-
-
-class CategoryCreate(CategoryBase):
-
-    category_name: str
-
-
-class CategoryCreateDB(CategoryBase):
-    pass
-
-
-class CategoryUpdate(CategoryBase):
-    pass
-
-
-class CategoryUpdateDB(CategoryBase):
-    pass
-
-
-class Category(CategoryBase):
-    id: uuid.UUID
-    category_name: str
 
     class Config:
         from_attributes = True

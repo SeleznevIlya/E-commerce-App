@@ -9,13 +9,12 @@ product_router = APIRouter(prefix="/product", tags=["product"])
 
 
 @product_router.post("/create")
-async def create_product(product: ProductCreate, q: Annotated[list[str], Query()] = []) -> Product:
-    result = await ProductService.create_new_product(product)
-    await ProductService.add_product_categories(result.product_name, q)
-    return result
+async def create_product(product: ProductCreate, category_list: Annotated[list[str], Query()] = []) -> Product:
+    new_product = await ProductService.create_new_product(product)
+    res = await ProductService.add_product_categories(new_product.product_name, category_list)
+    return res
 
-
-
+ 
 @product_router.get("/{product_name}")
 async def get_product(product_name: str) -> Product:
     return await ProductService.get_product(product_name)

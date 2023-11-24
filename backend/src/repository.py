@@ -31,6 +31,10 @@ class AbstractRepository(ABC):
     @abstractmethod
     async def find_all():
         raise NotImplementedError
+    
+    @abstractmethod
+    async def find_all_with_connected_model():
+        raise NotImplementedError
 
     @abstractmethod
     async def add():
@@ -74,7 +78,8 @@ class BaseRepository(AbstractRepository, Generic[ModelType, CreateSchemaType, Up
             filter_by(**filter_by).
             options(selectinload(*filter))
             )
-        return await session.scalar(stmt)
+        result = await session.execute(stmt)
+        return result.scalar()
 
     @classmethod
     async def find_all(cls, 
@@ -88,6 +93,24 @@ class BaseRepository(AbstractRepository, Generic[ModelType, CreateSchemaType, Up
             select(cls.model)
             .filter(*filter)
             .filter_by(**filter_by)
+            .offset(offset)
+            .limit(limit)
+        )
+        result = await session.execute(stmt)
+        return result.scalars().all()
+    
+    @classmethod
+    async def find_all_with_connected_model(cls, 
+                       session: AsyncSession, 
+                       *filter, 
+                       offset: int = 0, 
+                       limit: int = 100, 
+                       **filter_by
+                    ) -> List[ModelType]:
+        stmt = (
+            select(cls.model)
+            .filter_by(**filter_by)
+            .options(selectinload(*filter))
             .offset(offset)
             .limit(limit)
         )
