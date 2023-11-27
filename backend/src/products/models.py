@@ -1,9 +1,14 @@
+from typing import TYPE_CHECKING
 import uuid
 from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy.dialects.postgresql import UUID
 
 from src.database import Base
+
+
+if TYPE_CHECKING:
+    from ..carts.models import CartModel
 
 
 class ProductCategoryModel(Base):
@@ -41,6 +46,10 @@ class ProductModel(Base):
 
     categories: Mapped[list["CategoryModel"]] = relationship(
         secondary="product_category", back_populates="products"
+    )
+
+    carts: Mapped[list["CartModel"]] = relationship(
+        secondary="cart_product", back_populates="product_list"
     )
 
     # association between Product -> ProductCategory -> Category

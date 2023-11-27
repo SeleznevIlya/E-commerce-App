@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 
-from .schemas import CategoryCreate, CategoryCreateDB, ProductCreate, ProductCreateDB, ProductUpdate, ProductUpdateDB, ProductUpdatePartial
+from .schemas import CategoryCreate, CategoryCreateDB, ProductCreate, ProductCreateDB, ProductUpdate, ProductUpdateDB
 from .models import CategoryModel, ProductModel
 from ..database import async_session_maker
 from .repository import CategoryRepository, ProductRepository
@@ -72,6 +72,7 @@ class ProductService:
     
     @classmethod
     async def get_product_list_by_partname(cls, product_name: str) -> list[ProductModel]:
+        # TODO: change the function to "find_all_with_connected_model"
         async with async_session_maker() as session:
             products = await ProductRepository.find_all(
                 session, 
@@ -106,32 +107,7 @@ class ProductService:
             await session.commit()
             
             return product_update
-    
-
-    # @classmethod
-    # async def update_product_partial(cls, query_product_name: str, product: ProductUpdatePartial) -> ProductModel:
-    #     async with async_session_maker() as session:
-    #         db_product = await ProductRepository.find_one_or_none(session, 
-    #                                                            ProductModel.product_name == query_product_name)
-    #         if db_product is None:
-    #             raise HTTPException(
-    #                 status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
-
-    #         product_in = ProductUpdateDB(
-    #             **product.model_dump()
-    #         )
-
-    #         product_update = await ProductRepository.update(
-    #             session,
-    #             ProductModel.product_name == query_product_name,
-    #             obj_in=product_in,
-    #         )
-
-    #         await session.commit()
-            
-    #         return product_update
         
-    
     @classmethod
     async def delete_product(cls, product_name: str):
         async with async_session_maker() as session:

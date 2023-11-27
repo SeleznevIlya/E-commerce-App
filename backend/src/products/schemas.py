@@ -71,12 +71,12 @@ class ProductUpdateDB(ProductBase):
     pass
 
 
-class ProductUpdatePartial(ProductUpdate):
-    product_name: str | None = None
-    product_code: str | None = None
-    description: str | None = None
-    cost: int | None = None
-    count: int | None = None
+# class ProductUpdatePartial(ProductUpdate):
+#     product_name: str | None = None
+#     product_code: str | None = None
+#     description: str | None = None
+#     cost: int | None = None
+#     count: int | None = None
     
     
 class Product(ProductBase):

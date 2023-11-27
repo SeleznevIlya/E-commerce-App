@@ -2,7 +2,7 @@ from typing import Annotated, Optional
 from fastapi import APIRouter, Query
 
 from .service import CategoryService, ProductService
-from .schemas import Category, CategoryCreate, Product, ProductCreate, ProductUpdate, ProductUpdatePartial
+from .schemas import Category, CategoryCreate, Product, ProductCreate, ProductUpdate
 
 
 product_router = APIRouter(prefix="/product", tags=["product"])
@@ -33,13 +33,8 @@ async def get_product_list_by_partname(partname: str) -> list[Product]:
 
 
 @product_router.put("/{product_name}")
-async def update_product(product_name: str, product: ProductUpdate) -> Product:
+async def update_product(product_name: str, product: ProductUpdate) -> ProductUpdate:
     return await ProductService.update_product(product_name, product)
-
-
-# @product_router.patch("/{product_name}")
-# async def update_product_partial(product_name: str, product: ProductUpdatePartial):
-#     return await ProductService.update_product_partial(product_name, product)
 
 
 @product_router.delete("/{product_name}")

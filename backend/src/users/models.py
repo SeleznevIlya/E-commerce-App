@@ -1,13 +1,17 @@
+from typing import TYPE_CHECKING
 import uuid
 from datetime import datetime
 
 import sqlalchemy as sa
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 
 from ..database import Base
 
+
+if TYPE_CHECKING:
+    from ..carts.models import CartModel
 
 
 class UserModel(Base):
@@ -21,6 +25,8 @@ class UserModel(Base):
     is_active: Mapped[bool] = mapped_column(default=True)
     is_verified: Mapped[bool] = mapped_column(default=False)
     is_superuser: Mapped[bool] = mapped_column(default=False)
+
+    cart: Mapped["CartModel"] = relationship(back_populates="user")
 
 
 
