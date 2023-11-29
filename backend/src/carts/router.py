@@ -27,3 +27,7 @@ async def add_product_in_cart(product_id: str, user: UserModel = Depends(get_cur
 async def remove_all_products_from_cart(user: UserModel = Depends(get_current_user)):
     return await CartService.remove_all_products_from_cart(user_id=user.id)
 
+
+@cart_router.patch("/remove_product")
+async def remove_product_from_cart(product_id: str, user: UserModel = Depends(get_current_user)):
+    return await CartService.remove_product_from_cart(user_id=user.id, product_id=product_id)

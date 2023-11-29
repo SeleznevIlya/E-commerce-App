@@ -30,12 +30,6 @@ class CartService:
     @classmethod
     async def get_cart(cls, user_id: uuid.UUID) -> CartModel:
         async with async_session_maker() as session:
-            # db_cart = await CartRepository.find_one_with_connected_model(
-            #     session,
-            #     CartModel.product_list,
-            #     user_id=user_id,
-            # )
-
             db_cart = await CartRepository.find_one_with_association_model(
                 session,
                 CartProductModel.product,
@@ -74,7 +68,6 @@ class CartService:
             
             await session.commit()
         return {"status": 200}
-        # return cart
 
     @classmethod
     async def remove_all_products_from_cart(cls, user_id: uuid.UUID):
@@ -92,11 +85,33 @@ class CartService:
                 CartProductModel.cart_id == cart.id
                 )
 
-            # await session.execute(stmt)
             await session.commit()
         return {"details": "Cart is empty"}
     
     @classmethod
-    async def remove_product_from_cart(cls, user_id: uuid.UUID):
-        pass
+    async def remove_product_from_cart(cls, user_id: uuid.UUID, product_id: uuid.UUID):
+        async with async_session_maker() as session:
+            cart = await CartRepository.find_one_with_association_model(
+                session,
+                CartProductModel.product,
+                user_id=user_id
+            )
+
+            for obj in cart.product_associations:
+                if str(obj.product_id) != product_id:
+                    continue
+                if obj.count == 1:
+                    await CartProductRepository.delete(
+                        session,
+                        CartProductModel.product_id == product_id
+                        )
+                    cart.total_amount -= obj.product.cost
+                elif obj.count > 1:
+                    cart.total_amount -= obj.product.cost
+                    obj.count -= 1
+                    break
+
+            await session.commit()
+
+
 
