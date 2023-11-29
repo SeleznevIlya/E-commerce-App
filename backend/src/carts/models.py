@@ -17,10 +17,20 @@ class CartProductModel(Base):
     __tablename__ = "cart_product"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    
     product_id: Mapped[int] = mapped_column(ForeignKey("product.id"))
     cart_id: Mapped[int] = mapped_column(ForeignKey("cart.id"))
 
     count: Mapped[int] = mapped_column(default=1, server_default="1")
+
+    # association between ProductCategory -> Product
+
+    cart: Mapped["CartModel"] = relationship(back_populates="product_associations")
+
+    # association between ProductCategory -> Category
+
+    product: Mapped["ProductModel"] = relationship(back_populates="cart_associations")
+
 
 
 
@@ -32,8 +42,11 @@ class CartModel(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), unique=True)
     total_amount: Mapped[int] = mapped_column(default=0)
 
-    product_list: Mapped[list["ProductModel"]] = relationship(
-        secondary="cart_product", back_populates="carts"
-    )
+    # product_list: Mapped[list["ProductModel"]] = relationship(
+    #     secondary="cart_product", back_populates="carts"
+    # )
     
     user: Mapped['UserModel'] = relationship(back_populates="cart")
+
+    product_associations: Mapped[list["CartProductModel"]] = relationship(back_populates="cart")
+

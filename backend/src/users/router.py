@@ -4,6 +4,8 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, Response, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 
+from ..carts.service import CartService
+
 from .schemas import UserCreate, User, Token, UserUpdate
 from .service import UserService, AuthService
 from ..exceptions import InvalidCredentialsException
@@ -18,7 +20,9 @@ user_router = APIRouter(prefix="/user", tags=["user"])
 
 @auth_router.post("/register/", status_code=status.HTTP_201_CREATED)
 async def register(user: UserCreate) -> User:
-    return await UserService.create_new_user(user)
+    new_user = await UserService.create_new_user(user)
+    await CartService.create_cart(new_user.id)
+    return new_user
 
 
 @auth_router.post("/login")

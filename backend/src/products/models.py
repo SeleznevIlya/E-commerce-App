@@ -8,7 +8,7 @@ from src.database import Base
 
 
 if TYPE_CHECKING:
-    from ..carts.models import CartModel
+    from ..carts.models import CartModel, CartProductModel
 
 
 class ProductCategoryModel(Base):
@@ -48,13 +48,19 @@ class ProductModel(Base):
         secondary="product_category", back_populates="products"
     )
 
-    carts: Mapped[list["CartModel"]] = relationship(
-        secondary="cart_product", back_populates="product_list"
-    )
+    # carts: Mapped[list["CartModel"]] = relationship(
+    #     secondary="cart_product", back_populates="product_list"
+    # )
 
     # association between Product -> ProductCategory -> Category
 
     # category_associations: Mapped[list["ProductCategoryModel"]] = relationship(back_populates="product")
+
+    # association between Product -> CartProduct -> Cart
+
+    cart_associations: Mapped[list["CartProductModel"]] = relationship(back_populates="product")
+
+
 
 
     def __repr__(self) -> str:
