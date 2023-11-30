@@ -67,7 +67,8 @@ class CartService:
                 cart.total_amount += product_result.cost
             
             await session.commit()
-        return {"status": 200}
+        return {"status": 200, 
+                "details": f"'{product_result.product_name}' added to cart"}
 
     @classmethod
     async def remove_all_products_from_cart(cls, user_id: uuid.UUID):
@@ -112,6 +113,8 @@ class CartService:
                     break
 
             await session.commit()
+        return {"status": 200, 
+                "details": f"Count '{product_id}' has been reduced"}
 
 
 
