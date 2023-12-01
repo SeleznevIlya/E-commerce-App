@@ -9,13 +9,14 @@ from src.database import Base
 
 if TYPE_CHECKING:
     from ..carts.models import CartModel, CartProductModel
+    from ..orders.models import OrderProductModel
 
 
 class ProductCategoryModel(Base):
     __tablename__ = "product_category"
 
-    product_id: Mapped[int] = mapped_column(ForeignKey("product.id"), primary_key=True)
-    category_id: Mapped[int] = mapped_column(ForeignKey("category.id"), primary_key=True)
+    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id"), primary_key=True)
+    category_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("category.id"), primary_key=True)
 
     # association between ProductCategory -> Product
 
@@ -60,9 +61,10 @@ class ProductModel(Base):
 
     cart_associations: Mapped[list["CartProductModel"]] = relationship(back_populates="product")
 
+    order_associations: Mapped[list["OrderProductModel"]] = relationship(back_populates="product")
 
 
-
+    
     def __repr__(self) -> str:
         return f'ProductModel: product name = {self.product_name}'
 

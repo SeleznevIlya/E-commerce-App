@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 class CartProductModel(Base):
     __tablename__ = "cart_product"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
     
     product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id"))
     cart_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("cart.id"))
