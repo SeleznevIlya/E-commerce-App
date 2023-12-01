@@ -27,12 +27,27 @@ class CartUpdate(BaseModel):
 class CartUpdateDB(CartBase):
     pass
 
+
+class ProductInCart(BaseModel):
+    id: uuid.UUID
+    product_name: str
+    description: str
+    cost: int
+    count: int
+    rating: int
+
+
+class Products(BaseModel):
+    count: int
+    product: ProductInCart
+
     
 class Cart(CartBase):
     id: uuid.UUID
     user_id: uuid.UUID
     total_amount: int = 0
-    products: list[Product]
+    product_associations: list[Products]
+    
 
 
     class Config:

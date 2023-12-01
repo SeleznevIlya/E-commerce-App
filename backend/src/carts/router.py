@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from src.carts.schemas import Cart
 from src.carts.service import CartService
 from src.users.dependencies import get_current_user
 
@@ -9,7 +10,7 @@ cart_router = APIRouter(prefix="/cart", tags=["carts"])
 
 
 @cart_router.get("/")
-async def get_cart(user: UserModel = Depends(get_current_user)):
+async def get_cart(user: UserModel = Depends(get_current_user)) -> Cart:
     return await CartService.get_cart(user_id=user.id)
 
 

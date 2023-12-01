@@ -15,6 +15,7 @@ from src.database import Base
 from src.users.models import UserModel, RefreshSessionModel
 from src.products.models import ProductModel, ProductCategoryModel, CategoryModel
 from src.carts.models import CartModel, CartProductModel
+# from src.orders.models import OrderModel
 from src.config import settings
 
 # this is the Alembic Config object, which provides
