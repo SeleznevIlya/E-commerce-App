@@ -1,7 +1,7 @@
 import uuid
 
 from datetime import date
-from typing import Optional
+from typing import Literal, Optional
 from pydantic import BaseModel, Field
 
 
@@ -11,6 +11,7 @@ class OrderBase(BaseModel):
     total_discount: Optional[int] = Field(None)
     payment_amount: Optional[int] = Field(None)
     is_paid: bool = Field(False)
+    promocode: Optional[str] = Field(None)
     status: Optional[str] = Field(None)
     
 
@@ -18,6 +19,7 @@ class OrderCreate(OrderBase):
     total_amount: int
     total_discount: int
     payment_amount: int
+    promocode: str
 
 
 class OrderCreateDB(OrderBase):
@@ -25,7 +27,7 @@ class OrderCreateDB(OrderBase):
 
 
 class OrderUpdate(BaseModel):
-    pass
+    status: Literal["PENDING", "RECEIVED", "COMPLETED", "CANCELED"]
 
 
 class OrderUpdateDB(OrderBase):
@@ -54,10 +56,44 @@ class Order(OrderBase):
     total_discount: int
     payment_amount: int
     is_paid: bool
+    promocode: str | None
     status: str
 
     product_associations: list[Products]
     
+
+    class Config:
+        from_attributes = True
+
+# _________________________________
+
+
+class PromocodeBase(BaseModel):
+    promocode: Optional[str] = Field(None)
+    discount: Optional[int] = Field(None)
+
+
+class PromocodeCreate(PromocodeBase):
+    promocode: str
+    discount: int
+
+
+class PromocodeCreateDB(PromocodeBase):
+    pass
+
+
+class PromocodeUpdate(BaseModel):
+    discount : int
+
+
+class PromocodeUpdateDB(PromocodeBase):
+    pass
+
+
+class Promocode(PromocodeBase):
+    id: uuid.UUID
+    promocode: str
+    discount: int
 
     class Config:
         from_attributes = True

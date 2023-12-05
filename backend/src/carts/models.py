@@ -16,18 +16,18 @@ if TYPE_CHECKING:
 class CartProductModel(Base):
     __tablename__ = "cart_product"
 
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     
     product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id"))
     cart_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("cart.id"))
 
     count: Mapped[int] = mapped_column(default=1, server_default="1")
 
-    # association between ProductCategory -> Product
+    # association between CartProduct -> Cart
 
     cart: Mapped["CartModel"] = relationship(back_populates="product_associations")
 
-    # association between ProductCategory -> Category
+    # association between CartProduct -> Product
 
     product: Mapped["ProductModel"] = relationship(back_populates="cart_associations")
 

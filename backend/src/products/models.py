@@ -10,7 +10,7 @@ from src.database import Base
 if TYPE_CHECKING:
     from ..carts.models import CartModel, CartProductModel
     from ..orders.models import OrderProductModel
-
+    
 
 class ProductCategoryModel(Base):
     __tablename__ = "product_category"

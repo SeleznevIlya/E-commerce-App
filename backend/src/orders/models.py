@@ -4,7 +4,7 @@ import enum
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, func, Enum
+from sqlalchemy import CheckConstraint, ForeignKey, Integer, String, func, Enum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -55,6 +55,23 @@ class OrderModel(Base):
     total_discount: Mapped[int] = mapped_column(default=0)
     payment_amount: Mapped[int] = mapped_column(default=0)
     is_paid: Mapped[bool] = mapped_column(default=False)
+    promocode: Mapped[str] = mapped_column(default="")
     status: Mapped[OrderStatus] = mapped_column(Enum(OrderStatus, name="order_status"), server_default="PENDING")
 
     product_associations: Mapped[list["OrderProductModel"]] = relationship(back_populates="order")
+
+
+class PromoCodeModel(Base):
+    __tablename__ = "promocode"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID, primary_key=True, index=True, default=uuid.uuid4)
+    promocode: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    discount: Mapped[int]
+
+
+    __table_args__ = (
+        CheckConstraint('discount > 0', name='min_discount'),
+        CheckConstraint('discount <= 100', name='max_discount')
+    )
+
