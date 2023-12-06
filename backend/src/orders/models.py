@@ -25,7 +25,7 @@ class OrderStatus(enum.Enum):
 class OrderProductModel(Base):
     __tablename__ = "order_product"
 
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     
     product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id"))
     order_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("order.id"))

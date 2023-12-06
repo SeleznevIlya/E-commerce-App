@@ -1,12 +1,12 @@
 import uuid
 
-from datetime import date
+from datetime import datetime
 from typing import Literal, Optional
 from pydantic import BaseModel, Field
 
 
 class OrderBase(BaseModel):
-    created_at: Optional[date] = Field(None)
+    created_at: Optional[datetime] = Field(None)
     total_amount: Optional[int] = Field(None)
     total_discount: Optional[int] = Field(None)
     payment_amount: Optional[int] = Field(None)
@@ -16,10 +16,11 @@ class OrderBase(BaseModel):
     
 
 class OrderCreate(OrderBase):
+    user_id: uuid.UUID
     total_amount: int
     total_discount: int
     payment_amount: int
-    promocode: str
+    promocode: Optional[str]
 
 
 class OrderCreateDB(OrderBase):
@@ -51,7 +52,7 @@ class Products(BaseModel):
 class Order(OrderBase):
     id: uuid.UUID
     user_id: uuid.UUID
-    created_at: date
+    created_at: datetime
     total_amount: int
     total_discount: int
     payment_amount: int
