@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from src.orders.schemas import Order
+from src.orders.schemas import Order, OrderUpdate
 from src.carts.service import CartService
 
 from src.orders.service import OrderService, PromocodeService
@@ -17,7 +17,9 @@ async def create_order(promocode: str = None, user: UserModel = Depends(get_curr
     order, product_dict = await OrderService.create_new_order(user_id=user.id, promocode=promocode)
     await OrderService.add_products_in_order(product_dict, order.id)
     await CartService.remove_all_products_from_cart(user_id=user.id)
-    return {"status": 200, "details": "Your order has beed created"}, order
+    return {"status": 200, 
+            "details": "Your order has beed created",
+            "order_id": order.id}
 
 @order_router.get("/")
 async def get_all_orders(user: UserModel = Depends(get_current_superuser)):
@@ -35,6 +37,10 @@ async def get_order_by_id(order_id: str, user: UserModel = Depends(get_current_s
 @order_router.get("/{user_id}")
 async def get_orders_by_user(user_id: str, user: UserModel = Depends(get_current_superuser)) -> list[Order]:
     return await OrderService.get_orders_by_user(user_id=user_id)
+
+@order_router.patch("/")
+async def update_order_status_by_id(order: OrderUpdate, order_id: str):
+    return await OrderService.update_order_status(order=order, order_id=order_id)
 
 @promocode_router.post("/")
 async def create_promocode(promocode: str, discount: int):
