@@ -1,5 +1,7 @@
+from typing import Optional
 from fastapi import APIRouter, Depends
-from src.orders.schemas import Order, OrderUpdate
+
+from src.orders.schemas import Order, OrderUpdate, Promocode, PromocodeUpdate
 from src.carts.service import CartService
 
 from src.orders.service import OrderService, PromocodeService
@@ -49,3 +51,17 @@ async def create_promocode(promocode: str, discount: int):
 @promocode_router.get("/{promocode}")
 async def get_promocode(promocode:str):
     return await PromocodeService.get_promocode(promocode=promocode)
+
+@promocode_router.get("/")
+async def get_promocode_list(offset: Optional[int] = 0,
+                           limit: Optional[int] = 100,
+                           ) -> list[Promocode]:
+    return await PromocodeService.get_promocode_list(offset=offset, limit=limit) 
+
+@promocode_router.delete("/delete")
+async def delete_promocode(promocode: str):
+    return await PromocodeService.delete_promocode(promocode)
+
+@promocode_router.put("/{query_promocode}")
+async def update_promocode(query_promocode: str, promocode: PromocodeUpdate) -> Promocode:
+    return await PromocodeService.update_promocode(query_promocode=query_promocode, promocode=promocode)

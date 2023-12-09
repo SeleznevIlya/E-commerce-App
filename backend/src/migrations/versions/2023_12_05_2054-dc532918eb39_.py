@@ -84,4 +84,5 @@ def downgrade() -> None:
     op.drop_table('cart')
     op.drop_index(op.f('promocode_id_idx'), table_name='promocode')
     op.drop_table('promocode')
+    sa.Enum(name='order_status').drop(op.get_bind(), checkfirst=False)
     # ### end Alembic commands ###
