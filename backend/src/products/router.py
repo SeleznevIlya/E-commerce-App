@@ -1,5 +1,7 @@
 from typing import Annotated, Optional
 from fastapi import APIRouter, Query
+from fastapi_cache.decorator import cache
+
 
 from .service import CategoryService, ProductService
 from .schemas import Category, CategoryCreate, Product, ProductCreate, ProductUpdate
@@ -21,6 +23,7 @@ async def get_product(product_name: str) -> Product:
 
 
 @product_router.get("/")
+@cache(expire=30)
 async def get_product_list(offset: Optional[int] = 0,
                            limit: Optional[int] = 100,
                            ) -> list[Product]:

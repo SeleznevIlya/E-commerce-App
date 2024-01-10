@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, Response, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi_cache.decorator import cache
 
 from ..carts.service import CartService
 
@@ -98,6 +99,7 @@ async def abort_all_sessions(
 
 
 @user_router.get("")
+@cache(expire=30)
 async def get_user_list(
         offset: Optional[int] = 0,
         limit: Optional[int] = 100,

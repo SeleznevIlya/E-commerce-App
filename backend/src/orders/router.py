@@ -1,5 +1,6 @@
 from typing import Optional
 from fastapi import APIRouter, Depends
+from fastapi_cache.decorator import cache
 
 from src.orders.schemas import Order, OrderUpdate, Promocode, PromocodeUpdate
 from src.carts.service import CartService
@@ -24,19 +25,26 @@ async def create_order(promocode: str = None, user: UserModel = Depends(get_curr
             "order_id": order.id}
 
 @order_router.get("/")
-async def get_all_orders(user: UserModel = Depends(get_current_superuser)):
-    pass
+async def get_all_orders(offset: Optional[int] = 0,
+                         limit: Optional[int] = 100,
+                         user: UserModel = Depends(get_current_superuser)
+                         ) -> list[Order]:
+    await OrderService.get_orders_by_user(offset=offset, limit=limit)
 
 @order_router.get("/me")
-async def get_my_orders(user: UserModel = Depends(get_current_user)) -> list[Order]:
-    return await OrderService.get_orders_by_user(user_id=user.id)
+@cache(expire=30)
+async def get_my_orders(offset: Optional[int] = 0,
+                        limit: Optional[int] = 100,
+                        user: UserModel = Depends(get_current_user)) -> list[Order]:
+    return await OrderService.get_orders_by_user(offset=offset, limit=limit, **{"user_id": user.id})
 
 @order_router.get("/{order_id}/details")
-async def get_order_by_id(order_id: str, user: UserModel = Depends(get_current_superuser)) -> Order:
+async def get_order_by_id(order_id: str, user: UserModel = Depends(get_current_user)) -> Order:
     order = await OrderService.get_order_by_id(order_id=order_id)
     return order
 
 @order_router.get("/{user_id}")
+@cache(expire=30)
 async def get_orders_by_user(user_id: str, user: UserModel = Depends(get_current_superuser)) -> list[Order]:
     return await OrderService.get_orders_by_user(user_id=user_id)
 
@@ -49,6 +57,7 @@ async def create_promocode(promocode: str, discount: int):
     return await PromocodeService.create_promocode(promocode=promocode, discount=discount)
 
 @promocode_router.get("/{promocode}")
+@cache(expire=30)
 async def get_promocode(promocode:str):
     return await PromocodeService.get_promocode(promocode=promocode)
 

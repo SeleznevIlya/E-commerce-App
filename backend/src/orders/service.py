@@ -90,8 +90,20 @@ class OrderService:
             await session.commit()
 
     @classmethod
-    async def get_all_orders(cls):
-        pass
+    async def get_all_orders(cls, offset: int = 0, limit: int = 100, **filter_by):
+        async with async_session_maker() as session:
+            orders = await OrderRepository.find_all(
+                session,  
+                offset=offset, 
+                limit=limit, 
+                **filter_by
+                )
+        
+        if orders is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Orders not found"
+            )
+        return orders
 
     @classmethod
     async def get_order_by_id(cls, order_id: uuid.UUID) -> OrderModel:
@@ -110,17 +122,21 @@ class OrderService:
 
     @classmethod
     async def get_orders_by_user(
-        cls, user_id: uuid.UUID, offset: int = 0, limit: int = 100, **filter_by
-    ) -> OrderModel:
+        cls, offset: int = 0, limit: int = 100, **filter_by
+    ) -> list[OrderModel]:
         async with async_session_maker() as session:
             db_order = await OrderRepository.find_all_with_association_model(
                 session,
                 OrderProductModel.product,
-                user_id=user_id,
+                # user_id=user_id,
                 offset=offset,
                 limit=limit,
                 **filter_by,
             )
+            if db_order is None:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, detail="You don't have any orders yet"
+                )
 
         return db_order
 
