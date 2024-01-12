@@ -27,6 +27,16 @@ class Settings(BaseSettings):
     def TEST_DATABASE_URL(self):
         return f"postgresql+asyncpg://{self.TEST_POSTGRES_USER}:{self.TEST_POSTGRES_PASSWORD}@{self.TEST_POSTGRES_HOST}:{self.TEST_POSTGRES_PORT}/{self.TEST_POSTGRES_DB}"
 
+    SMTP_HOST: str
+    SMTP_PORT: int
+    SMTP_USERNAME: str
+    SMTP_PASSWORD: str
+
+    SMTP_TEST_USER: str
+
+    REDIS_HOST: str
+    REDIS_PORT: int
+
     SECRET_KEY: str
     ALGORITHM: str
 

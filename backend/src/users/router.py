@@ -5,6 +5,8 @@ from fastapi import APIRouter, Depends, Response, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_cache.decorator import cache
 
+from src.tasks.service import send_message
+
 from ..carts.service import CartService
 
 from .schemas import UserCreate, User, Token, UserUpdate
@@ -22,6 +24,8 @@ user_router = APIRouter(prefix="/user", tags=["user"])
 @auth_router.post("/register/", status_code=status.HTTP_201_CREATED)
 async def register(user: UserCreate) -> User:
     new_user = await UserService.create_new_user(user)
+    send_message.delay("user", user_id = new_user.id, email_to=new_user.email)
+
     await CartService.create_cart(new_user.id)
     return new_user
 

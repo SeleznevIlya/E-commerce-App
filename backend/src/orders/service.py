@@ -33,9 +33,11 @@ class OrderService:
                 )
 
             products_in_cart = {}
+            products_in_cart_with_name = {}
 
             for product_in_cart in user_cart.product_associations:
                 products_in_cart[str(product_in_cart.product.id)] = product_in_cart.count
+                products_in_cart_with_name[str(product_in_cart.product.id)] = [product_in_cart.product.product_name, product_in_cart.count]
 
             if promocode:
                 try:
@@ -71,7 +73,7 @@ class OrderService:
             )
             await session.commit()
 
-        return new_order, products_in_cart
+        return new_order, products_in_cart, products_in_cart_with_name
 
     @classmethod
     async def add_products_in_order(cls, product_dict: dict, order_id: uuid.UUID):

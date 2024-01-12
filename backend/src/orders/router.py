@@ -2,6 +2,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends
 from fastapi_cache.decorator import cache
 
+from src.tasks.service import send_message
 from src.orders.schemas import Order, OrderUpdate, Promocode, PromocodeUpdate
 from src.carts.service import CartService
 
@@ -17,7 +18,8 @@ promocode_router = APIRouter(prefix="/promocode", tags=["promocodes"])
 
 @order_router.post("/")
 async def create_order(promocode: str = None, user: UserModel = Depends(get_current_user)):
-    order, product_dict = await OrderService.create_new_order(user_id=user.id, promocode=promocode)
+    order, product_dict, product_dict_with_name = await OrderService.create_new_order(user_id=user.id, promocode=promocode)
+    send_message.delay("order", order_id = order.id, product_dict = product_dict_with_name, email_to=user.email)
     await OrderService.add_products_in_order(product_dict, order.id)
     await CartService.remove_all_products_from_cart(user_id=user.id)
     return {"status": 200, 
