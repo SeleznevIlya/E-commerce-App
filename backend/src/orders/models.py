@@ -13,6 +13,7 @@ from src.database import Base
 
 if TYPE_CHECKING:
     from ..products.models import ProductModel
+    from ..users.models import UserModel
 
 
 class OrderStatus(enum.Enum):
@@ -59,6 +60,10 @@ class OrderModel(Base):
     status: Mapped[OrderStatus] = mapped_column(Enum(OrderStatus, name="order_status"), server_default="PENDING")
 
     product_associations: Mapped[list["OrderProductModel"]] = relationship(back_populates="order")
+    user: Mapped['UserModel'] = relationship(back_populates="order")
+
+    def __str__(self) -> str:
+        return f"Order: {self.id}"
 
 
 class PromoCodeModel(Base):

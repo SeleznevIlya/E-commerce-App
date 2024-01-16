@@ -31,14 +31,17 @@ async def get_all_orders(offset: Optional[int] = 0,
                          limit: Optional[int] = 100,
                          user: UserModel = Depends(get_current_superuser)
                          ) -> list[Order]:
-    await OrderService.get_orders_by_user(offset=offset, limit=limit)
+    return await OrderService.get_orders_by_user(offset=offset, limit=limit)
 
 @order_router.get("/me")
 @cache(expire=30)
 async def get_my_orders(offset: Optional[int] = 0,
                         limit: Optional[int] = 100,
-                        user: UserModel = Depends(get_current_user)) -> list[Order]:
-    return await OrderService.get_orders_by_user(offset=offset, limit=limit, **{"user_id": user.id})
+                        user: UserModel = Depends(get_current_user)
+                        ) -> list[Order]:
+    return await OrderService.get_orders_by_user(offset=offset, 
+                                                 limit=limit, 
+                                                 user_id=user.id)
 
 @order_router.get("/{order_id}/details")
 async def get_order_by_id(order_id: str, user: UserModel = Depends(get_current_user)) -> Order:

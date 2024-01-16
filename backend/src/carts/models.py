@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 import uuid
 
-from sqlalchemy import ForeignKey, String, Text
+from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -48,3 +48,5 @@ class CartModel(Base):
 
     product_associations: Mapped[list["CartProductModel"]] = relationship(back_populates="cart")
 
+    def __str__(self) -> str:
+        return f"User's cart: {self.user_id}"

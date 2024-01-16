@@ -12,6 +12,7 @@ from ..database import Base
 
 if TYPE_CHECKING:
     from ..carts.models import CartModel
+    from ..orders.models import OrderModel
 
 
 class UserModel(Base):
@@ -27,7 +28,10 @@ class UserModel(Base):
     is_superuser: Mapped[bool] = mapped_column(default=False)
 
     cart: Mapped["CartModel"] = relationship(back_populates="user")
+    order: Mapped[list["OrderModel"]] = relationship(back_populates="user")
 
+    def __str__(self) -> str:
+        return f"User: {self.email}"
 
 
 class RefreshSessionModel(Base):

@@ -63,8 +63,6 @@ class ProductModel(Base):
 
     order_associations: Mapped[list["OrderProductModel"]] = relationship(back_populates="product")
 
-
-    
     def __repr__(self) -> str:
         return f'ProductModel: product name = {self.product_name}'
 
@@ -86,6 +84,8 @@ class CategoryModel(Base):
     
     # product_associations: Mapped[list["ProductCategoryModel"]] = relationship(back_populates="category")
 
+    def __repr__(self) -> str:
+        return f'{self.category_name}'
     
 
 # class ProductImage(Base):
