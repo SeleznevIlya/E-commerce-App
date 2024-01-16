@@ -49,3 +49,22 @@ def create_user_information_template(
 		subtype="html"
 	)
     return email
+
+
+def send_test_schedule_message(
+		email_to: EmailStr
+):
+    
+    email = EmailMessage()
+    email["Subject"] = "Hobby Games"
+    email["From"] = settings.SMTP_USERNAME
+    email["To"] = email_to
+
+    email.set_content(
+		f"""
+			<h1> Здарова чел </h1>
+            Проверяю работу задач по расписанию
+		""",
+		subtype="html"
+	)
+    return email

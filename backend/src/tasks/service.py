@@ -2,10 +2,10 @@ import smtplib
 
 from src.tasks.email_templates import create_order_information_template, create_user_information_template
 from src.config import settings
-from src.tasks.celery import celery
+from src.tasks.celery import celery_worker
 
        
-@celery.task
+@celery_worker.task
 def send_message(service: str, *args, **kwargs):
         
     match service:
