@@ -173,7 +173,7 @@ async def delete_user(
     user_id: str,
     current_user: UserModel = Depends(get_current_superuser)
 ):
-    await UserService.delete_user_from_superuser(user_id)
+    await UserService.delete_user(user_id)
     return {"message": "User was deleted"}
 
 

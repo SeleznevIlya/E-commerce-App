@@ -1,21 +1,34 @@
 from httpx import AsyncClient
 import pytest
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.carts.models import CartProductModel
+
+from src.carts.repository import CartRepository
+
 
 @pytest.mark.parametrize("email, fio, password, status_code",[
     ("qwerty@mail.ru", "qwerty", "qwerty", 201),
     ("qwerty@mail.ru", "qwerty", "qw123erty", 409),
     ("123qew", "qwerty", "qwerty", 422),
 ])
-async def test_register(email, fio, password, status_code, ac: AsyncClient):
+async def test_register(email, fio, password, status_code, ac: AsyncClient, session: AsyncSession):
     response = await ac.post("/auth/register/", json=
                              {"email": email,
                               "fio": fio,
                               "password": password},
     )
+    response_data = response.json()
 
     assert response.status_code == status_code
-
-
+    
+    if response.status_code == 201:
+        users_cart = await CartRepository.find_one_with_association_model(
+            session,
+            CartProductModel.product,
+            user_id=response_data["id"]
+        )
+        assert users_cart
 
 @pytest.mark.parametrize("username, password, status_code",[
     ("test@test.com", "test", 200),

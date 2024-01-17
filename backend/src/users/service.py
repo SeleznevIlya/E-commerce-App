@@ -193,17 +193,6 @@ class UserService:
                 status_code=status.HTTP_404_NOT_FOUND, detail="Users not found"
             )
         return users
-
-        # return [
-        #     User(
-        #         id=str(db_user.id),
-        #         email=db_user.email,
-        #         fio=db_user.fio,
-        #         is_active=db_user.is_active,
-        #         is_verified=db_user.is_verified,
-        #         is_superuser=db_user.is_superuser
-        #     ) for db_user in users
-        # ]
         
     @classmethod
     async def update_user_from_superuser(cls, user_id: uuid.UUID, user: UserUpdate) -> UserModel:
@@ -222,12 +211,6 @@ class UserService:
             )
             await session.commit()
             return user_update
-        
-    @classmethod
-    async def delete_user_from_superuser(cls, user_id: uuid.UUID) -> None:
-        async with async_session_maker() as session:
-            await UserRepository.delete(session, UserModel.id == user_id)
-            await session.commit()
 
     @classmethod
     async def verify_user(cls, user_id: uuid.UUID) -> UserModel:
