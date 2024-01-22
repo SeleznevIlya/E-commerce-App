@@ -28,8 +28,8 @@ class OrderProductModel(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     
-    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id"))
-    order_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("order.id"))
+    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id", ondelete="CASCADE"))
+    order_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("order.id", ondelete="CASCADE"))
 
     count: Mapped[int] = mapped_column(default=1, server_default="1")
 
@@ -47,7 +47,7 @@ class OrderModel(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID, primary_key=True, index=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"))
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
     created_at: Mapped[datetime] = mapped_column(
         server_default=func.now(),
         default=datetime.utcnow,

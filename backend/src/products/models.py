@@ -15,8 +15,8 @@ if TYPE_CHECKING:
 class ProductCategoryModel(Base):
     __tablename__ = "product_category"
 
-    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id"), primary_key=True)
-    category_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("category.id"), primary_key=True)
+    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id", ondelete="CASCADE"), primary_key=True)
+    category_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("category.id", ondelete="CASCADE"), primary_key=True)
 
     # association between ProductCategory -> Product
 

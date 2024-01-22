@@ -18,8 +18,8 @@ class CartProductModel(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     
-    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id"))
-    cart_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("cart.id"))
+    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id", ondelete="CASCADE"))
+    cart_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("cart.id", ondelete="CASCADE"))
 
     count: Mapped[int] = mapped_column(default=1, server_default="1")
 
@@ -37,7 +37,7 @@ class CartModel(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID, primary_key=True, index=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"), unique=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), unique=True)
     total_amount: Mapped[int] = mapped_column(default=0)
 
     # product_list: Mapped[list["ProductModel"]] = relationship(

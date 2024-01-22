@@ -30,7 +30,8 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan,
+              )
 
 
 app.add_middleware(
@@ -41,7 +42,7 @@ app.add_middleware(
     allow_headers=settings.CORS_HEADERS,
 )
 
-app.include_router(auth_router)
+app.include_router(auth_router, prefix="/api/v1")
 app.include_router(user_router)
 app.include_router(product_router)
 app.include_router(cart_router)
