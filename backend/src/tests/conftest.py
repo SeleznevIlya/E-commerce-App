@@ -1,8 +1,13 @@
 import asyncio
 import json
-from httpx import AsyncClient
 import pytest
+
+from httpx import AsyncClient
 from sqlalchemy import insert
+
+from src.orders.models import OrderModel
+from src.carts.models import CartModel, CartProductModel
+from src.products.models import ProductModel
 
 from src.config import settings
 from src.database import Base, async_session_maker, engine
@@ -24,11 +29,21 @@ async def prepare_database():
             return json.load(file)
 
     users = open_mock_json("users")
+    products = open_mock_json("products")
+    carts = open_mock_json("cart")
+    cart_product = open_mock_json("cart_product")
+    order = open_mock_json("order")
 
     async with async_session_maker() as session:
-        stmt = insert(UserModel).values(users)
-
-        await session.execute(stmt)
+        for Model, values in [
+             (UserModel, users),
+             (ProductModel, products),
+             (CartModel, carts),
+             (CartProductModel, cart_product),
+             (OrderModel, order),
+        ]:
+            stmt = insert(Model).values(values)
+            await session.execute(stmt)
         await session.commit()
 
 	
@@ -42,11 +57,20 @@ def event_loop(request):
 
 @pytest.fixture(scope="function")
 async def ac():
-     async with AsyncClient(app=fastapi_app, base_url="http://test") as ac:
-          yield ac
+    async with AsyncClient(app=fastapi_app, base_url="http://test") as ac:
+        # response = await ac.post("/auth/login", 
+        #                     data={
+        #                         "username": username,
+        #                         "password": password
+        #                           },
+        #                     headers={"content-type": "application/x-www-form-urlencoded"}
+        #                     )
+        # token = response.json().get("access_toker")
+        # ac.headers["Authorization"] = f"Bearer {token}"
+        yield ac
 
 
 @pytest.fixture(scope="function")
 async def session():
-     async with async_session_maker() as session:
-          yield session
+    async with async_session_maker() as session:
+        yield session

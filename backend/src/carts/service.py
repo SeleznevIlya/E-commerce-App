@@ -68,7 +68,7 @@ class CartService:
             
             await session.commit()
         return {"status": 200, 
-                "details": f"'{product_result.product_name}' added to cart"}
+                "details": f"{product_result.product_name} added to cart"}
 
     @classmethod
     async def remove_all_products_from_cart(cls, user_id: uuid.UUID):

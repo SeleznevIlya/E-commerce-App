@@ -1,10 +1,12 @@
 [
-    {
+    {   
+        "id": "a5d70116-9caa-4628-a4fd-d859c5f1f5be",
         "email": "test@test.com",
         "fio": "test",
         "hashed_password": "$2b$12$ib8N/MddMjSxNs4UOF69c.KuO4CyglQHcNATYpHcKJJn5rbltYNFG"
     },
-    {
+    {   
+        "id": "f60fa316-5b4b-4da5-af36-a63659c5c744",
         "email": "ilya@example.com",
         "fio": "ilya_seleznev",
         "hashed_password": "$2b$12$SwAOsDqK7tjnvIcjlTAUvuX6K4xv/zUvqp8Y2oSCtqVv4f/XCB2Bi"

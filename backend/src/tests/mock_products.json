@@ -1,0 +1,30 @@
+[
+    {   
+        "id": "f38788b8-af6e-444e-a81f-ac6309b6b182",
+        "product_name": "string",
+        "description": "string",
+        "product_code": "123123",
+        "cost": 100,
+        "rating": 0,
+        "count": 1
+    },
+    {
+        "id": "b01ff2d4-7c4d-4205-9adc-762ff5df38cf",
+        "product_name": "123",
+        "description": "123",
+        "product_code": "123",
+        "cost": 101230,
+        "rating": 1234,
+        "count": 1
+    },
+    {
+        "id": "aacd78e2-9dfd-4905-9e47-770ca2f958dd",
+        "product_name": "qwerty",
+        "description": "qwerty",
+        "product_code": "123",
+        "cost": 322,
+        "rating": 22220,
+        "count": 312
+    }
+]
+

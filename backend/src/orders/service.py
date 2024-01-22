@@ -90,6 +90,9 @@ class OrderService:
                 associate_model = OrderProductModel(product=product_result, count=count)
                 order.product_associations.append(associate_model)
             await session.commit()
+        return {
+            "status": 200
+        }
 
     @classmethod
     async def get_all_orders(cls, offset: int = 0, limit: int = 100, **filter_by):

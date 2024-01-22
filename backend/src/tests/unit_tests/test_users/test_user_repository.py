@@ -36,10 +36,3 @@ async def test_delete_user_by_email(email, exists, session: AsyncSession):
 		assert not user_1
 	else:
 		assert not user
-
-    
-	
-		
-
-
-	

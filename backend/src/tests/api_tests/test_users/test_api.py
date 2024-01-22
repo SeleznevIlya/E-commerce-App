@@ -13,7 +13,7 @@ from src.carts.repository import CartRepository
     ("123qew", "qwerty", "qwerty", 422),
 ])
 async def test_register(email, fio, password, status_code, ac: AsyncClient, session: AsyncSession):
-    response = await ac.post("/auth/register/", json=
+    response = await ac.post("/api/v1/auth/register/", json=
                              {"email": email,
                               "fio": fio,
                               "password": password},
@@ -36,7 +36,7 @@ async def test_register(email, fio, password, status_code, ac: AsyncClient, sess
     # ("qwerty@mail.ru", "uncorrect_password", 401),
 ])
 async def test_login(username, password, status_code, ac: AsyncClient):
-    response = await ac.post("/auth/login", 
+    response = await ac.post("/api/v1/auth/login", 
                             data={
                                 "username": username,
                                 "password": password
@@ -52,7 +52,7 @@ async def test_login(username, password, status_code, ac: AsyncClient):
 
 
 async def test_verify_user(ac: AsyncClient):
-    await ac.post("/auth/login", 
+    await ac.post("/api/v1/auth/login", 
                             data={
                                 "username": "test@test.com",
                                 "password": "test"
@@ -66,16 +66,15 @@ async def test_verify_user(ac: AsyncClient):
 
 
 async def test_logout(ac: AsyncClient):
-    await ac.post("/auth/login", 
+    log = await ac.post("/api/v1/auth/login", 
                             data={
                                 "username": "test@test.com",
                                 "password": "test"
-                                  },
+                                },
                             headers={"content-type": "application/x-www-form-urlencoded"}
     )
    
-
-    response = await ac.post("/auth/logout")
+    response = await ac.post("/api/v1/auth/logout")
     # assert response.status_code == 200
 
     assert response.json() == {'message': 'Logged out successfully'}
