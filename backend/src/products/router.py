@@ -11,12 +11,16 @@ product_router = APIRouter(prefix="/product", tags=["product"])
 
 
 @product_router.post("/create")
-async def create_product(product: ProductCreate, category_list: Annotated[list[str], Query()] = []) -> Product:
+async def create_product(
+    product: ProductCreate, category_list: Annotated[list[str], Query()] = []
+) -> Product:
     new_product = await ProductService.create_new_product(product)
-    res = await ProductService.add_product_categories(new_product.product_name, category_list)
+    res = await ProductService.add_product_categories(
+        new_product.product_name, category_list
+    )
     return res
 
- 
+
 @product_router.get("/{product_name}")
 async def get_product(product_name: str) -> Product:
     return await ProductService.get_product(product_name)
@@ -24,9 +28,10 @@ async def get_product(product_name: str) -> Product:
 
 @product_router.get("/")
 @cache(expire=30)
-async def get_product_list(offset: Optional[int] = 0,
-                           limit: Optional[int] = 100,
-                           ) -> list[Product]:
+async def get_product_list(
+    offset: Optional[int] = 0,
+    limit: Optional[int] = 100,
+) -> list[Product]:
     return await ProductService.get_product_list(offset=offset, limit=limit)
 
 
@@ -51,9 +56,10 @@ async def create_category(category: CategoryCreate) -> Category:
 
 
 @product_router.get("/category/")
-async def get_category_list(offset: Optional[int] = 0,
-                           limit: Optional[int] = 100,
-                           ) -> list[Category]:
+async def get_category_list(
+    offset: Optional[int] = 0,
+    limit: Optional[int] = 100,
+) -> list[Category]:
     return await CategoryService.get_category_list(offset=offset, limit=limit)
 
 

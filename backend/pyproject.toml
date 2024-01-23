@@ -23,6 +23,10 @@ redis = "^5.0.1"
 celery = "^5.3.6"
 flower = "^2.0.1"
 sqladmin = "^0.16.0"
+flake8 = "^7.0.0"
+autoflake = "^2.2.1"
+isort = "^5.13.2"
+pyright = "^1.1.348"
 
 
 [build-system]
@@ -32,4 +36,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 88
 target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+(src/tests|src/migrations)
+'''
 

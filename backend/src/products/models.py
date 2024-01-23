@@ -10,13 +10,17 @@ from src.database import Base
 if TYPE_CHECKING:
     from ..carts.models import CartModel, CartProductModel
     from ..orders.models import OrderProductModel
-    
+
 
 class ProductCategoryModel(Base):
     __tablename__ = "product_category"
 
-    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id", ondelete="CASCADE"), primary_key=True)
-    category_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("category.id", ondelete="CASCADE"), primary_key=True)
+    product_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("product.id", ondelete="CASCADE"), primary_key=True
+    )
+    category_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("category.id", ondelete="CASCADE"), primary_key=True
+    )
 
     # association between ProductCategory -> Product
 
@@ -31,7 +35,8 @@ class ProductModel(Base):
     __tablename__ = "product"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID, primary_key=True, index=True, default=uuid.uuid4)
+        UUID, primary_key=True, index=True, default=uuid.uuid4
+    )
     product_name: Mapped[str] = mapped_column(String(50), unique=True, index=True)
     description: Mapped[str] = mapped_column(
         Text,
@@ -39,7 +44,7 @@ class ProductModel(Base):
         server_default="",
     )
     product_code: Mapped[str]
-    cost: Mapped[int] 
+    cost: Mapped[int]
     count: Mapped[int] = mapped_column(default=0)
     rating: Mapped[int] = mapped_column(default=0)
 
@@ -59,19 +64,24 @@ class ProductModel(Base):
 
     # association between Product -> CartProduct -> Cart
 
-    cart_associations: Mapped[list["CartProductModel"]] = relationship(back_populates="product")
+    cart_associations: Mapped[list["CartProductModel"]] = relationship(
+        back_populates="product"
+    )
 
-    order_associations: Mapped[list["OrderProductModel"]] = relationship(back_populates="product")
+    order_associations: Mapped[list["OrderProductModel"]] = relationship(
+        back_populates="product"
+    )
 
     def __repr__(self) -> str:
-        return f'ProductModel: product name = {self.product_name}'
+        return f"ProductModel: product name = {self.product_name}"
 
 
 class CategoryModel(Base):
     __tablename__ = "category"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID, primary_key=True, index=True, default=uuid.uuid4)
+        UUID, primary_key=True, index=True, default=uuid.uuid4
+    )
     category_name: Mapped[str] = mapped_column(String(30))
 
     # many-to-many relationship to Product, bypassing the `ProductCategory` class
@@ -81,23 +91,18 @@ class CategoryModel(Base):
     )
 
     # association between Category -> ProductCategory -> Product
-    
+
     # product_associations: Mapped[list["ProductCategoryModel"]] = relationship(back_populates="category")
 
     def __repr__(self) -> str:
-        return f'{self.category_name}'
-    
+        return f"{self.category_name}"
+
 
 # class ProductImage(Base):
 #     __tablename__ = "product_image"
-    
+
 #     image_name: Mapped[str] = mapped_column(String(50), primary_key=True)
 #     image_path: Mapped[str]
 #     filetype: Mapped[str]
 
 #     product_id: Mapped[uuid.UUID] = mapped_column(UUID, ForeignKey("product.id", ondelete="CASCADE"))
-
-
-
-
-

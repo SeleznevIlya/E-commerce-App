@@ -27,9 +27,13 @@ class OrderProductModel(Base):
     __tablename__ = "order_product"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    
-    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("product.id", ondelete="CASCADE"))
-    order_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("order.id", ondelete="CASCADE"))
+
+    product_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("product.id", ondelete="CASCADE")
+    )
+    order_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("order.id", ondelete="CASCADE")
+    )
 
     count: Mapped[int] = mapped_column(default=1, server_default="1")
 
@@ -46,8 +50,11 @@ class OrderModel(Base):
     __tablename__ = "order"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID, primary_key=True, index=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
+        UUID, primary_key=True, index=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("user.id", ondelete="CASCADE")
+    )
     created_at: Mapped[datetime] = mapped_column(
         server_default=func.now(),
         default=datetime.utcnow,
@@ -57,10 +64,14 @@ class OrderModel(Base):
     payment_amount: Mapped[int] = mapped_column(default=0)
     is_paid: Mapped[bool] = mapped_column(default=False)
     promocode: Mapped[str] = mapped_column(default="")
-    status: Mapped[OrderStatus] = mapped_column(Enum(OrderStatus, name="order_status"), server_default="PENDING")
+    status: Mapped[OrderStatus] = mapped_column(
+        Enum(OrderStatus, name="order_status"), server_default="PENDING"
+    )
 
-    product_associations: Mapped[list["OrderProductModel"]] = relationship(back_populates="order")
-    user: Mapped['UserModel'] = relationship(back_populates="order")
+    product_associations: Mapped[list["OrderProductModel"]] = relationship(
+        back_populates="order"
+    )
+    user: Mapped["UserModel"] = relationship(back_populates="order")
 
     def __str__(self) -> str:
         return f"Order: {self.id}"
@@ -70,13 +81,12 @@ class PromoCodeModel(Base):
     __tablename__ = "promocode"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID, primary_key=True, index=True, default=uuid.uuid4)
+        UUID, primary_key=True, index=True, default=uuid.uuid4
+    )
     promocode: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     discount: Mapped[int]
 
-
     __table_args__ = (
-        CheckConstraint('discount > 0', name='min_discount'),
-        CheckConstraint('discount <= 100', name='max_discount')
+        CheckConstraint("discount > 0", name="min_discount"),
+        CheckConstraint("discount <= 100", name="max_discount"),
     )
-

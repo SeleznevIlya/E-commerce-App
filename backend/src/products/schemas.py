@@ -5,12 +5,10 @@ from pydantic import BaseModel, Field
 
 
 class CategoryBase(BaseModel):
-
     category_name: Optional[str] = Field(None)
 
 
 class CategoryCreate(CategoryBase):
-
     category_name: str
 
 
@@ -34,16 +32,15 @@ class Category(CategoryBase):
         from_attributes = True
 
 
-#_________________________________
+# _________________________________
 
 
 class ProductBase(BaseModel):
-
     product_name: Optional[str] = Field(None)
     description: Optional[str] = Field(None)
-    product_code:  Optional[str] = Field(None)
-    cost:  Optional[int] = Field(None)
-    rating:  Optional[int] = Field(None)
+    product_code: Optional[str] = Field(None)
+    cost: Optional[int] = Field(None)
+    rating: Optional[int] = Field(None)
     count: Optional[int] = Field(None)
 
 
@@ -77,8 +74,8 @@ class ProductUpdateDB(ProductBase):
 #     description: str | None = None
 #     cost: int | None = None
 #     count: int | None = None
-    
-    
+
+
 class Product(ProductBase):
     id: uuid.UUID
     product_name: str
@@ -87,7 +84,6 @@ class Product(ProductBase):
     count: int
     rating: int
     categories: list[Category]
-
 
     class Config:
         from_attributes = True

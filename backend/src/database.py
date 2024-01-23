@@ -14,7 +14,7 @@ class Base(DeclarativeBase):
 
 if settings.MODE == "TEST":
     DATABASE_URL = settings.TEST_DATABASE_URL
-    DATABASE_PARAMS = {'poolclass': NullPool}
+    DATABASE_PARAMS = {"poolclass": NullPool}
 else:
     DATABASE_URL = settings.DATABASE_URL
     DATABASE_PARAMS = {"echo": True}

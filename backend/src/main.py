@@ -7,13 +7,15 @@ from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
 from sqladmin import Admin
 
-from src.admin.views import (CartAdmin, 
-                             UserAdmin, 
-                             CartProductAdmin, 
-                             ProductAdmin, 
-                             CategoryAdmin, 
-                             OrderAdmin, 
-                             OrderProductAdmin)
+from src.admin.views import (
+    CartAdmin,
+    UserAdmin,
+    CartProductAdmin,
+    ProductAdmin,
+    CategoryAdmin,
+    OrderAdmin,
+    OrderProductAdmin,
+)
 from src.admin.auth import authentication_backend
 from src.users.router import auth_router, user_router
 from src.products.router import product_router
@@ -30,8 +32,9 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan,
-              )
+app = FastAPI(
+    lifespan=lifespan,
+)
 
 
 app.add_middleware(
@@ -50,11 +53,7 @@ app.include_router(order_router)
 app.include_router(promocode_router)
 
 
-admin = Admin(
-    app, 
-    engine,
-    authentication_backend=authentication_backend
-    )
+admin = Admin(app, engine, authentication_backend=authentication_backend)
 
 admin.add_view(UserAdmin)
 admin.add_view(CartAdmin)

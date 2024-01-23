@@ -13,7 +13,7 @@ class OrderBase(BaseModel):
     is_paid: bool = Field(False)
     promocode: Optional[str] = Field(None)
     status: Optional[str] = Field(None)
-    
+
 
 class OrderCreate(OrderBase):
     user_id: uuid.UUID
@@ -48,7 +48,7 @@ class Products(BaseModel):
     count: int
     product: ProductInOrder
 
-    
+
 class Order(OrderBase):
     id: uuid.UUID
     user_id: uuid.UUID
@@ -61,10 +61,10 @@ class Order(OrderBase):
     status: str
 
     product_associations: list[Products]
-    
 
     class Config:
         from_attributes = True
+
 
 # _________________________________
 
@@ -84,7 +84,7 @@ class PromocodeCreateDB(PromocodeBase):
 
 
 class PromocodeUpdate(BaseModel):
-    discount : int
+    discount: int
 
 
 class PromocodeUpdateDB(PromocodeBase):
