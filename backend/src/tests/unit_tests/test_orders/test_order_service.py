@@ -17,11 +17,9 @@ class TestOrder:
             user_id=user_id,
             promocode=promocode
         )
-        print(test_order[1])
 
         assert isinstance(test_order[0], OrderModel) == True
         self.order_id = test_order[0].id
-        print(self.order_id)
 
 
     @pytest.mark.parametrize('order_id', [
