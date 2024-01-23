@@ -1,16 +1,14 @@
 import uuid
 from typing import Optional
 
+from fastapi import Depends, HTTPException, status
 from jose import jwt
 
-from fastapi import Depends, HTTPException, status
-
-from .service import UserService
-from .utils import OAuth2PasswordBearerWithCookie
-from .models import UserModel
 from ..config import settings
 from ..exceptions import InvalidTokenException
-
+from .models import UserModel
+from .service import UserService
+from .utils import OAuth2PasswordBearerWithCookie
 
 oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="/api/auth/login")
 

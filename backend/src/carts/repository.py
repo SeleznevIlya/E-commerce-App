@@ -1,11 +1,12 @@
 from typing import Optional
-from sqlalchemy import delete, select
-from sqlalchemy.orm import selectinload, joinedload
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.repository import BaseRepository
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
 from src.carts.models import CartModel, CartProductModel
 from src.carts.schemas import CartCreateDB, CartUpdate
+from src.repository import BaseRepository
 
 
 class CartRepository(BaseRepository[CartModel, CartCreateDB, CartUpdate]):

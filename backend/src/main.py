@@ -1,28 +1,29 @@
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
 from sqladmin import Admin
 
+from src.admin.auth import authentication_backend
 from src.admin.views import (
     CartAdmin,
-    UserAdmin,
     CartProductAdmin,
-    ProductAdmin,
     CategoryAdmin,
     OrderAdmin,
     OrderProductAdmin,
+    ProductAdmin,
+    UserAdmin,
 )
-from src.admin.auth import authentication_backend
-from src.users.router import auth_router, user_router
-from src.products.router import product_router
 from src.carts.router import cart_router
-from src.orders.router import order_router, promocode_router
 from src.config import settings
 from src.database import engine
+from src.orders.router import order_router, promocode_router
+from src.products.router import product_router
+from src.users.router import auth_router, user_router
 
 
 @asynccontextmanager

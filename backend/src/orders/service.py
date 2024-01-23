@@ -2,11 +2,10 @@ import uuid
 
 from fastapi import HTTPException, status
 
-from src.products.repository import ProductRepository
-from src.orders.utils import count_total_discount_and_payment_amount
-from src.orders.models import OrderModel, OrderProductModel, PromoCodeModel
 from src.carts.service import CartService
-
+from src.database import async_session_maker
+from src.orders.models import OrderModel, OrderProductModel, PromoCodeModel
+from src.orders.repository import OrderRepository, PromocodeRepository
 from src.orders.schemas import (
     OrderCreate,
     OrderUpdate,
@@ -16,9 +15,8 @@ from src.orders.schemas import (
     PromocodeUpdate,
     PromocodeUpdateDB,
 )
-from src.orders.repository import OrderRepository, PromocodeRepository
-
-from src.database import async_session_maker
+from src.orders.utils import count_total_discount_and_payment_amount
+from src.products.repository import ProductRepository
 
 
 class OrderService:

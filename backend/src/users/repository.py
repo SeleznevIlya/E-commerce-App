@@ -1,10 +1,10 @@
 from src.repository import BaseRepository
-from src.users.models import UserModel, RefreshSessionModel
+from src.users.models import RefreshSessionModel, UserModel
 from src.users.schemas import (
-    UserCreateDB,
-    UserUpdateDB,
     RefreshSessionCreate,
     RefreshSessionUpdate,
+    UserCreateDB,
+    UserUpdateDB,
 )
 
 

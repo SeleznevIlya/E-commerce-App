@@ -1,9 +1,10 @@
 import smtplib
+
 from pydantic import EmailStr
 
 from src.config import settings
-from src.tasks.email_templates import send_test_schedule_message
 from src.tasks.celery import celery_worker
+from src.tasks.email_templates import send_test_schedule_message
 
 
 @celery_worker.task(name="send_message_every_day")

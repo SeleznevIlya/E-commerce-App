@@ -1,9 +1,9 @@
 from typing import Optional
-from sqlalchemy import select
-from sqlalchemy.orm import selectinload
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.repository import BaseRepository
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
 from src.orders.models import OrderModel, PromoCodeModel
 from src.orders.schemas import (
     OrderCreateDB,
@@ -11,6 +11,7 @@ from src.orders.schemas import (
     PromocodeCreateDB,
     PromocodeUpdate,
 )
+from src.repository import BaseRepository
 
 
 class OrderRepository(BaseRepository[OrderModel, OrderCreateDB, OrderUpdate]):

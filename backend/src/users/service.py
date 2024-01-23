@@ -1,18 +1,25 @@
 import uuid
 from datetime import datetime, timedelta, timezone
-from typing import Optional
-from jose import jwt
-from fastapi import HTTPException, status
-from typing import List
+from typing import List, Optional
 
-from .utils import is_valid_password, get_password_hash
-from .schemas import Token, UserCreate, UserCreateDB, UserUpdate, UserUpdateDB
+from fastapi import HTTPException, status
+from jose import jwt
+
 from ..config import settings
 from ..database import async_session_maker
-from .repository import RefreshSessionRepository, UserRepository
-from .schemas import RefreshSessionCreate, RefreshSessionUpdate
-from .models import UserModel, RefreshSessionModel
 from ..exceptions import InvalidTokenException, TokenExpiredException
+from .models import RefreshSessionModel, UserModel
+from .repository import RefreshSessionRepository, UserRepository
+from .schemas import (
+    RefreshSessionCreate,
+    RefreshSessionUpdate,
+    Token,
+    UserCreate,
+    UserCreateDB,
+    UserUpdate,
+    UserUpdateDB,
+)
+from .utils import get_password_hash, is_valid_password
 
 
 class AuthService:

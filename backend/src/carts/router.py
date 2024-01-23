@@ -4,9 +4,7 @@ from fastapi_cache.decorator import cache
 from src.carts.schemas import Cart
 from src.carts.service import CartService
 from src.users.dependencies import get_current_user
-
 from src.users.models import UserModel
-
 
 cart_router = APIRouter(prefix="/cart", tags=["carts"])
 

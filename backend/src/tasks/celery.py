@@ -3,7 +3,6 @@ from celery.schedules import crontab
 
 from src.config import settings
 
-
 celery_worker = Celery(
     "tasks",
     broker=f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}",

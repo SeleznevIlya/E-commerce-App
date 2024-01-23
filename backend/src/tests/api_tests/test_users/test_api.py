@@ -1,9 +1,8 @@
-from httpx import AsyncClient
 import pytest
+from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.carts.models import CartProductModel
-
 from src.carts.repository import CartRepository
 
 

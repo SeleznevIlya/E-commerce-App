@@ -1,8 +1,8 @@
-from fastapi import HTTPException
 import pytest
+from fastapi import HTTPException
 
+from src.products.schemas import CategoryCreate, ProductCreate
 from src.products.service import CategoryService, ProductService
-from src.products.schemas import ProductCreate, CategoryCreate
 
 
 class TestProduct:

@@ -1,16 +1,14 @@
 from typing import Optional
+
 from fastapi import APIRouter, Depends
 from fastapi_cache.decorator import cache
 
-from src.tasks.service import send_message
-from src.orders.schemas import Order, OrderUpdate, Promocode, PromocodeUpdate
 from src.carts.service import CartService
-
+from src.orders.schemas import Order, OrderUpdate, Promocode, PromocodeUpdate
 from src.orders.service import OrderService, PromocodeService
-
-from src.users.dependencies import get_current_user, get_current_superuser
+from src.tasks.service import send_message
+from src.users.dependencies import get_current_superuser, get_current_user
 from src.users.models import UserModel
-
 
 order_router = APIRouter(prefix="/order", tags=["orders"])
 promocode_router = APIRouter(prefix="/promocode", tags=["promocodes"])

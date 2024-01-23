@@ -1,17 +1,14 @@
-from typing import TypeVar, Generic, Optional, List, Union, Dict, Any
-
 from abc import ABC, abstractmethod
-
-from sqlalchemy import delete, insert, update, select
-from sqlalchemy.orm import selectinload
-from sqlalchemy.sql import func
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
 
 from pydantic import BaseModel
+from sqlalchemy import delete, insert, select, update
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+from sqlalchemy.sql import func
 
 from src.database import Base
-
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)

@@ -1,26 +1,23 @@
 import uuid
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, Response, Request, status
+from fastapi import APIRouter, Depends, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_cache.decorator import cache
 
 from src.tasks.service import send_message
 
 from ..carts.service import CartService
-
-from .schemas import UserCreate, User, Token, UserUpdate
-from .service import UserService, AuthService
-from ..exceptions import InvalidCredentialsException
 from ..config import settings
-from .models import UserModel
+from ..exceptions import InvalidCredentialsException
 from .dependencies import (
     get_current_active_user,
-    get_current_user,
     get_current_superuser,
-    get_current_verified_user,
+    get_current_user,
 )
-
+from .models import UserModel
+from .schemas import Token, User, UserCreate, UserUpdate
+from .service import AuthService, UserService
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 user_router = APIRouter(prefix="/user", tags=["user"])

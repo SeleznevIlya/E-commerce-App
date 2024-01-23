@@ -1,11 +1,10 @@
 from typing import Annotated, Optional
+
 from fastapi import APIRouter, Query
 from fastapi_cache.decorator import cache
 
-
-from .service import CategoryService, ProductService
 from .schemas import Category, CategoryCreate, Product, ProductCreate, ProductUpdate
-
+from .service import CategoryService, ProductService
 
 product_router = APIRouter(prefix="/product", tags=["product"])
 

@@ -1,13 +1,10 @@
 import uuid
-from fastapi import HTTPException, status
-from sqlalchemy import delete
 
+from ..database import async_session_maker
 from ..products.repository import ProductRepository
-
-from .schemas import CartCreate, CartCreateDB, CartUpdate, CartUpdateDB
 from .models import CartModel, CartProductModel
 from .repository import CartProductRepository, CartRepository
-from ..database import async_session_maker
+from .schemas import CartCreate
 
 
 class CartService:

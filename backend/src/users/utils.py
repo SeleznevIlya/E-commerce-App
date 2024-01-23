@@ -1,11 +1,10 @@
 from typing import Dict, Optional
-from passlib.context import CryptContext
 
+from fastapi import HTTPException, Request, status
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
 from fastapi.security import OAuth2
 from fastapi.security.utils import get_authorization_scheme_param
-from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
-from fastapi import Request, HTTPException, status
+from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

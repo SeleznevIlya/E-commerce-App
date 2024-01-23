@@ -1,18 +1,16 @@
 import asyncio
 import json
-import pytest
 
+import pytest
 from httpx import AsyncClient
 from sqlalchemy import insert
 
-from src.orders.models import OrderModel
 from src.carts.models import CartModel, CartProductModel
-from src.products.models import ProductModel
-
 from src.config import settings
 from src.database import Base, async_session_maker, engine
-from src.users.models import UserModel
 from src.main import app as fastapi_app
+from src.orders.models import OrderModel
+from src.products.models import ProductModel
 from src.users.models import UserModel
 
 

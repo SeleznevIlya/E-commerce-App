@@ -1,5 +1,5 @@
-from typing import TYPE_CHECKING
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
@@ -7,10 +7,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database import Base
 
-
 if TYPE_CHECKING:
-    from ..users.models import UserModel
     from ..products.models import ProductModel
+    from ..users.models import UserModel
 
 
 class CartProductModel(Base):

@@ -1,11 +1,11 @@
-from typing import TYPE_CHECKING
 import uuid
+from typing import TYPE_CHECKING
+
 from sqlalchemy import ForeignKey, String, Text
-from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database import Base
-
 
 if TYPE_CHECKING:
     from ..carts.models import CartModel, CartProductModel

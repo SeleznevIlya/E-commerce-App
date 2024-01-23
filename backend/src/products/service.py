@@ -1,5 +1,8 @@
 from fastapi import HTTPException, status
 
+from ..database import async_session_maker
+from .models import CategoryModel, ProductModel
+from .repository import CategoryRepository, ProductRepository
 from .schemas import (
     CategoryCreate,
     CategoryCreateDB,
@@ -8,9 +11,6 @@ from .schemas import (
     ProductUpdate,
     ProductUpdateDB,
 )
-from .models import CategoryModel, ProductModel
-from ..database import async_session_maker
-from .repository import CategoryRepository, ProductRepository
 
 
 class ProductService:

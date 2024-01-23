@@ -1,5 +1,6 @@
 from email.message import EmailMessage
 from uuid import UUID
+
 from pydantic import EmailStr
 
 from src.config import settings

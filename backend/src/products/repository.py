@@ -1,4 +1,3 @@
-from src.repository import BaseRepository
 from src.products.models import CategoryModel, ProductModel
 from src.products.schemas import (
     CategoryCreateDB,
@@ -6,6 +5,7 @@ from src.products.schemas import (
     ProductCreateDB,
     ProductUpdate,
 )
+from src.repository import BaseRepository
 
 
 class ProductRepository(BaseRepository[ProductModel, ProductCreateDB, ProductUpdate]):
