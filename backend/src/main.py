@@ -24,13 +24,17 @@ from src.database import engine
 from src.orders.router import order_router, promocode_router
 from src.products.router import product_router
 from src.users.router import auth_router, user_router
+from src.logger import logger
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    logger.info("service started")
     redis = aioredis.from_url(f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}")
+    logger.info("redis started")
     FastAPICache.init(RedisBackend(redis), prefix="cache")
     yield
+    logger.info("service stopped")
 
 
 app = FastAPI(

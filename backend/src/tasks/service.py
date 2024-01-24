@@ -1,3 +1,4 @@
+import logging
 import smtplib
 
 from src.config import settings
@@ -19,3 +20,4 @@ def send_message(service: str, *args, **kwargs):
     with smtplib.SMTP_SSL(settings.SMTP_HOST, settings.SMTP_PORT) as server:
         server.login(settings.SMTP_USERNAME, settings.SMTP_PASSWORD)
         server.send_message(msg_content)
+        logging.info(f"send email result: {msg_content}")

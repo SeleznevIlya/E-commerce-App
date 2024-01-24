@@ -9,6 +9,8 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.sql import func
 
 from src.database import Base
+from src.logger import logger
+
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -134,7 +136,7 @@ class BaseRepository(
             if isinstance(e, Exception):
                 msg = "Unknown Exc: Cannot insert data into table"
 
-            # logger.error(msg, extra={"table": cls.model.__tablename__}, exc_info=True)
+            logger.error(msg, extra={"table": cls.model.__tablename__}, exc_info=True)
             print(msg)
             return
 
@@ -173,7 +175,7 @@ class BaseRepository(
                 msg = "Unknown Exc"
             msg += ": Cannot bulk insert data into table"
 
-            # logger.error(msg, extra={"table": cls.model.__tablename__}, exc_info=True)
+            logger.error(msg, extra={"table": cls.model.__tablename__}, exc_info=True)
             return
 
     @classmethod

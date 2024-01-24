@@ -7,6 +7,7 @@ __pycache__/
 *.so
 
 celerybeat-schedule.db
+.logs/
 
 .vscode
 # Distribution / packaging
